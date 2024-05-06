@@ -1,0 +1,7 @@
+
+
+void lcdInit(void);
+void clearDisplay(void);
+void returnHome(void);
+void entryModeSet(void);
+void displayOn(void);

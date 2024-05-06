@@ -1,0 +1,10 @@
+12:34:39 **** Build of configuration Debug for project Lab1Blinky ****
+make -j12 all 
+arm-none-eabi-size  Lab1Blinky.elf 
+   text	   data	    bss	    dec	    hex	filename
+    864	      8	   1568	   2440	    988	Lab1Blinky.elf
+Finished building: default.size.stdout
+ 
+
+12:34:40 Build Finished. 0 errors, 0 warnings. (took 371ms)
+

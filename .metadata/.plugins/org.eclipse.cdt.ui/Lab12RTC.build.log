@@ -1,0 +1,35 @@
+14:15:43 **** Build of configuration Debug for project Lab12RTC ****
+make -j12 all 
+arm-none-eabi-gcc "../Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DSTM32L4 -DSTM32 -DSTM32L476RGTx -DNUCLEO_L476RG -c -I../Inc -I"C:/Users/TuranyElijah/OneDrive - University of Wisconsin-Stout/Documents/School/2024Spring/MicroproccessorSystemDesign/Lab1Blinky/Headers/CMSIS/Device/ST/STM32L4xx/Include" -I"C:/Users/TuranyElijah/OneDrive - University of Wisconsin-Stout/Documents/School/2024Spring/MicroproccessorSystemDesign/Lab1Blinky/Headers/CMSIS/Include" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/main.d" -MT"Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Src/main.o"
+arm-none-eabi-gcc "../Src/rtc.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DSTM32L4 -DSTM32 -DSTM32L476RGTx -DNUCLEO_L476RG -c -I../Inc -I"C:/Users/TuranyElijah/OneDrive - University of Wisconsin-Stout/Documents/School/2024Spring/MicroproccessorSystemDesign/Lab1Blinky/Headers/CMSIS/Device/ST/STM32L4xx/Include" -I"C:/Users/TuranyElijah/OneDrive - University of Wisconsin-Stout/Documents/School/2024Spring/MicroproccessorSystemDesign/Lab1Blinky/Headers/CMSIS/Include" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/rtc.d" -MT"Src/rtc.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Src/rtc.o"
+arm-none-eabi-gcc "../Src/syscalls.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DSTM32L4 -DSTM32 -DSTM32L476RGTx -DNUCLEO_L476RG -c -I../Inc -I"C:/Users/TuranyElijah/OneDrive - University of Wisconsin-Stout/Documents/School/2024Spring/MicroproccessorSystemDesign/Lab1Blinky/Headers/CMSIS/Device/ST/STM32L4xx/Include" -I"C:/Users/TuranyElijah/OneDrive - University of Wisconsin-Stout/Documents/School/2024Spring/MicroproccessorSystemDesign/Lab1Blinky/Headers/CMSIS/Include" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/syscalls.d" -MT"Src/syscalls.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Src/syscalls.o"
+arm-none-eabi-gcc "../Src/sysmem.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DSTM32L4 -DSTM32 -DSTM32L476RGTx -DNUCLEO_L476RG -c -I../Inc -I"C:/Users/TuranyElijah/OneDrive - University of Wisconsin-Stout/Documents/School/2024Spring/MicroproccessorSystemDesign/Lab1Blinky/Headers/CMSIS/Device/ST/STM32L4xx/Include" -I"C:/Users/TuranyElijah/OneDrive - University of Wisconsin-Stout/Documents/School/2024Spring/MicroproccessorSystemDesign/Lab1Blinky/Headers/CMSIS/Include" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/sysmem.d" -MT"Src/sysmem.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Src/sysmem.o"
+arm-none-eabi-gcc "../Src/timebase.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DSTM32L4 -DSTM32 -DSTM32L476RGTx -DNUCLEO_L476RG -c -I../Inc -I"C:/Users/TuranyElijah/OneDrive - University of Wisconsin-Stout/Documents/School/2024Spring/MicroproccessorSystemDesign/Lab1Blinky/Headers/CMSIS/Device/ST/STM32L4xx/Include" -I"C:/Users/TuranyElijah/OneDrive - University of Wisconsin-Stout/Documents/School/2024Spring/MicroproccessorSystemDesign/Lab1Blinky/Headers/CMSIS/Include" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/timebase.d" -MT"Src/timebase.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Src/timebase.o"
+arm-none-eabi-gcc "../Src/uart.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DSTM32L4 -DSTM32 -DSTM32L476RGTx -DNUCLEO_L476RG -c -I../Inc -I"C:/Users/TuranyElijah/OneDrive - University of Wisconsin-Stout/Documents/School/2024Spring/MicroproccessorSystemDesign/Lab1Blinky/Headers/CMSIS/Device/ST/STM32L4xx/Include" -I"C:/Users/TuranyElijah/OneDrive - University of Wisconsin-Stout/Documents/School/2024Spring/MicroproccessorSystemDesign/Lab1Blinky/Headers/CMSIS/Include" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/uart.d" -MT"Src/uart.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Src/uart.o"
+In file included from ../Src/rtc.c:2:
+../Inc/RTC.h:5:10: fatal error: stm32l476xx.h: No such file or directory
+    5 | #include "stm32l476xx.h"
+      |          ^~~~~~~~~~~~~~~
+compilation terminated.
+make: *** [Src/subdir.mk:34: Src/rtc.o] Error 1
+make: *** Waiting for unfinished jobs....
+../Src/main.c:2:10: fatal error: stm32l476xx.h: No such file or directory
+    2 | #include "stm32l476xx.h"
+      |          ^~~~~~~~~~~~~~~
+compilation terminated.
+make: *** [Src/subdir.mk:34: Src/main.o] Error 1
+../Src/timebase.c:2:10: fatal error: stm32l476xx.h: No such file or directory
+    2 | #include "stm32l476xx.h"
+      |          ^~~~~~~~~~~~~~~
+compilation terminated.
+In file included from ../Src/uart.c:3:
+../Inc/uart.h:4:10: fatal error: stm32l476xx.h: No such file or directory
+    4 | #include "stm32l476xx.h"
+      |          ^~~~~~~~~~~~~~~
+compilation terminated.
+make: *** [Src/subdir.mk:34: Src/timebase.o] Error 1
+make: *** [Src/subdir.mk:34: Src/uart.o] Error 1
+"make -j12 all" terminated with exit code 2. Build might be incomplete.
+
+14:15:43 Build Failed. 9 errors, 0 warnings. (took 609ms)
+

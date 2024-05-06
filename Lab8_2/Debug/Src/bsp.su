@@ -1,0 +1,5 @@
+C:/Users/TuranyElijah/OneDrive - University of Wisconsin-Stout/Documents/School/2024Spring/MicroproccessorSystemDesign/Lab1Blinky/Headers/CMSIS/Include/core_cm4.h:1679:22:__NVIC_EnableIRQ	16	static,ignoring_inline_asm
+../Src/bsp.c:11:6:led_init	4	static
+../Src/bsp.c:24:6:tim2_init	8	static
+../Src/bsp.c:47:6:TIM2_IRQHandler	8	static
+../Src/bsp.c:56:6:TIM2_callback	8	static

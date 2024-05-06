@@ -1,0 +1,4 @@
+../Src/servo.c:8:6:servoPinInit	4	static
+../Src/servo.c:35:6:TIM5CH1Init	4	static
+../Src/servo.c:69:6:servoOpen	16	static
+../Src/servo.c:76:6:servoClose	16	static

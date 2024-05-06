@@ -1,0 +1,148 @@
+#include "lcd.h"
+#include "stm32l476xx.h"
+
+
+#define REGSELECT 8
+#define ENABLE 9
+
+void lcdInit(void) {
+
+	RCC->AHB2ENR |=   RCC_AHB2ENR_GPIOBEN;
+
+	// GPIO Mode: Input(00), Output(01), AlterFunc(10), Analog(11, reset)
+	GPIOB->MODER &= ~(3U<<(2*REGSELECT) | 3U<<(2*ENABLE));  //clear PC 5,6,8,9 GPIO pins
+	GPIOB->MODER  |=  (1U<<(2*REGSELECT) | 1U<<(2*ENABLE));  //  set Output(01)
+	// GPIO Speed: Low speed (00), Medium speed (01), Fast speed (10), High speed (11)
+	GPIOB->OSPEEDR &= ~(3U<<(2*REGSELECT) | 3U<<(2*ENABLE));   //clear PC 5,6,8,9 GPIO pins
+	GPIOB->OSPEEDR |=  (2U<<(2*REGSELECT) | 2U<<(2*ENABLE));  // Set Fast speed
+	// GPIO Output Type: Output push-pull (0, reset), Output open drain (1)
+	// GPIO Push-Pull: No pull-up, pull-down (00), Pull-up (01), Pull-down (10), Reserved (11)
+	GPIOB->PUPDR  &= ~(3U<<(2*REGSELECT) | 3U<<(2*ENABLE));
+
+
+	// GPIO Mode: Input(00), Output(01), AlterFunc(10), Analog(11, reset)
+	GPIOB->MODER &= ~(3U<<(2*DB0) | 3U<<(2*DB1) | 3U<<(2*DB2) | 3U<<(2*DB3) | 3U<<(2*DB4) | 3U<<(2*DB5) | 3U<<(2*DB6) | 3U<<(2*DB7));  //clear PC 5,6,8,9 GPIO pins
+	GPIOB->MODER  |=  (1U<<(2*DB0) | 1U<<(2*DB1) | 1U<<(2*DB2) | 1U<<(2*DB3) | 1U<<(2*DB4) | 1U<<(2*DB5) | 1U<<(2*DB6) | 1U<<(2*DB7));  //  set Output(01)
+	// GPIO Speed: Low speed (00), Medium speed (01), Fast speed (10), High speed (11)
+	GPIOB->OSPEEDR &= ~(3U<<(2*DB0) | 3U<<(2*DB1) | 3U<<(2*DB2) | 3U<<(2*DB3) | 3U<<(2*DB4) | 3U<<(2*DB5) | 3U<<(2*DB6) | 3U<<(2*DB7));   //clear PC 5,6,8,9 GPIO pins
+	GPIOB->OSPEEDR |=  (2U<<(2*DB0) | 2U<<(2*DB1) | 2U<<(2*DB2) | 2U<<(2*DB3) | 2U<<(2*DB4) | 2U<<(2*DB5) | 2U<<(2*DB6) | 2U<<(2*DB7));  // Set Fast speed
+	// GPIO Output Type: Output push-pull (0, reset), Output open drain (1)
+	// GPIO Push-Pull: No pull-up, pull-down (00), Pull-up (01), Pull-down (10), Reserved (11)
+	GPIOB->PUPDR  &= ~(3U<<(2*DB0) | 3U<<(2*DB1) | 3U<<(2*DB2) | 3U<<(2*DB3) | 3U<<(2*DB4) | 3U<<(2*DB5) | 3U<<(2*DB6) | 3U<<(2*DB7));
+
+}
+
+void delayMs(int n){
+	int i, j;
+	for(i = 0 ; i < n; i++) {
+		for(j = 0; j < 800; j++) {} //was 7000{} /* do nothing */
+	}
+}
+
+void writeToBus(int b7, int b6, int b5, int b4, int b3, int b2, int b1, int b0) {
+	GPIOB->ODR &=~ ((1<<DB0) | (1<<DB1) | (1<<DB2) | (1<<DB3) | (1<<DB4) | (1<<DB5) | (1<<DB6) | (1<<DB7));
+	GPIOB->ODR |= ((b0<<DB0) | (b1<<DB1) | (b2<<DB2) | (b3<<DB3) | (b4<<DB4) | (b5<<DB5) | (b6<<DB6) | (b7<<DB7));
+}
+
+void enableSignal(void) {
+	GPIOB->ODR |= (1<<ENABLE);
+	delayMs(1);
+	GPIOB->ODR &=~ (1<<ENABLE);
+}
+
+void sendCommand(int b7, int b6, int b5, int b4, int b3, int b2, int b1, int b0) {
+	GPIOB->ODR &=~ (1<<REGSELECT);
+	writeToBus(b7,b6,b5,b4,b3,b2,b1,b0);
+	enableSignal();
+	delayMs(10);
+}
+
+void sendData(int val) {
+	GPIOB->ODR |= (1<<REGSELECT);
+	GPIOB->ODR &=~ ((1<<DB0) | (1<<DB1) | (1<<DB2) | (1<<DB3) | (1<<DB4) | (1<<DB5) | (1<<DB6) | (1<<DB7));
+	GPIOB->ODR |= val;
+	enableSignal();
+	delayMs(10);
+}
+
+void sendString(int string[]) {
+	for (int i = 0; i < sizeof(string)/sizeof(string[0]); i++) {
+		sendData(string[i]);
+	}
+}
+
+void lcdSetup(void) {
+	//Function set
+	//1,8bit,2line,5x7,x,x
+	sendCommand(0,0,1,1,1,0,0,0);
+
+	//Display on
+	//1,display,cursor,CursorBlink
+	sendCommand(0,0,0,0,1,1,1,0);
+
+	//Clear Screen
+	sendCommand(0,0,0,0,0,0,0,1);
+
+	//Set cursor position
+	//line1, position1
+	sendCommand(1,0,0,0,0,0,0,0);
+}
+
+//void clearDisplay(void) {
+//	delayMs(2);
+//	GPIOB->ODR &=~ ((1<<REGSELECT) | (1<<RW) | (1<<DB0) | (1<<DB1) | (1<<DB2) | (1<<DB3) | (1<<DB4) | (1<<DB5) | (1<<DB6) | (1<<DB7));
+//	writeToBus(1,0,0,0,0,0,0,0);
+//	GPIOB->ODR |= (1<<ENABLE);
+//	delayMs(1);
+//	GPIOB->ODR &=~ (1<<ENABLE);
+//}
+//
+//void returnHome(void) {
+//	delayMs(2);
+//	GPIOB->ODR &=~ ((1<<REGSELECT) | (1<<RW)  | (1<<DB0) | (1<<DB1) | (1<<DB2) | (1<<DB3) | (1<<DB4) | (1<<DB5) | (1<<DB6) | (1<<DB7));
+//	writeToBus(0,1,0,0,0,0,0,0);
+//	enableSignal();
+//}
+//
+//void entryModeSet(void) {
+//	delayMs(2);
+//	GPIOB->ODR &=~ ((1<<REGSELECT) | (1<<RW)  | (1<<DB0) | (1<<DB1) | (1<<DB2) | (1<<DB3) | (1<<DB4) | (1<<DB5) | (1<<DB6) | (1<<DB7));
+//	writeToBus(0,1,1,0,0,0,0,0);
+//	enableSignal();
+//}
+//
+//void displayOn(void) {
+//	delayMs(2);
+//	GPIOB->ODR &=~ ((1<<REGSELECT) | (1<<RW)  | (1<<DB0) | (1<<DB1) | (1<<DB2) | (1<<DB3) | (1<<DB4) | (1<<DB5) | (1<<DB6) | (1<<DB7));
+//	writeToBus(1,1,1,1,0,0,0,0);
+//	enableSignal();
+//}
+//
+//void displayOff(void) {
+//	delayMs(2);
+//	GPIOB->ODR &=~ ((1<<REGSELECT) | (1<<RW)  | (1<<DB0) | (1<<DB1) | (1<<DB2) | (1<<DB3) | (1<<DB4) | (1<<DB5) | (1<<DB6) | (1<<DB7));
+//	writeToBus(0,0,0,1,0,0,0,0);
+//	enableSignal();
+//}
+//
+//void functionSet(void) {
+//	delayMs(2);
+//	GPIOB->ODR &=~ ((1<<REGSELECT) | (1<<RW)  | (1<<DB0) | (1<<DB1) | (1<<DB2) | (1<<DB3) | (1<<DB4) | (1<<DB5) | (1<<DB6) | (1<<DB7));
+//	writeToBus(0,0,0,0,1,1,0,0);
+//	enableSignal();
+//}
+//
+//void writeData(void) {
+//	delayMs(2);
+//	GPIOB->ODR &=~ ((1<<REGSELECT) | (1<<RW)  | (1<<DB0) | (1<<DB1) | (1<<DB2) | (1<<DB3) | (1<<DB4) | (1<<DB5) | (1<<DB6) | (1<<DB7));
+//	GPIOB->ODR |= (1<<REGSELECT);
+//	GPIOB->ODR |= (1<<ENABLE);
+//	writeToBus(1,0,1,0,1,0,1,0);
+//	delayMs(1);
+//	GPIOB->ODR &=~ (1<<ENABLE);
+//}
+
+
+
+
+

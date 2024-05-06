@@ -1,0 +1,10 @@
+13:28:57 **** Incremental Build of configuration Debug for project Lab7ExternalInterrupt ****
+make -j12 all 
+arm-none-eabi-size  Lab7ExternalInterrupt.elf 
+   text	   data	    bss	    dec	    hex	filename
+   5660	    100	   1908	   7668	   1df4	Lab7ExternalInterrupt.elf
+Finished building: default.size.stdout
+ 
+
+13:28:58 Build Finished. 0 errors, 0 warnings. (took 287ms)
+

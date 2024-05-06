@@ -1,0 +1,19 @@
+13:04:04 **** Build of configuration Debug for project Lab13Part3 ****
+make -j12 all 
+arm-none-eabi-gcc "../Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DSTM32L4 -DSTM32 -DSTM32L476RGTx -DNUCLEO_L476RG -DSTM32L476xx -c -I../Inc -I"C:/Users/TuranyElijah/OneDrive - University of Wisconsin-Stout/Documents/School/2024Spring/Microproccessor/Headers/CMSIS/Device/ST/STM32L4xx/Include" -I"C:/Users/TuranyElijah/OneDrive - University of Wisconsin-Stout/Documents/School/2024Spring/Microproccessor/Headers/CMSIS/Include" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/main.d" -MT"Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Src/main.o"
+../Src/main.c: In function 'main':
+../Src/main.c:16:9: warning: implicit declaration of function 'bluetooth_uart_init' [-Wimplicit-function-declaration]
+   16 |         bluetooth_uart_init();
+      |         ^~~~~~~~~~~~~~~~~~~
+../Src/main.c:20:36: error: 'data_buff' undeclared (first use in this function)
+   20 |                 buffer_send_string(data_buff,bluetooth_port);
+      |                                    ^~~~~~~~~
+../Src/main.c:20:36: note: each undeclared identifier is reported only once for each function it appears in
+../Src/main.c:20:46: error: 'bluetooth_port' undeclared (first use in this function)
+   20 |                 buffer_send_string(data_buff,bluetooth_port);
+      |                                              ^~~~~~~~~~~~~~
+make: *** [Src/subdir.mk:40: Src/main.o] Error 1
+"make -j12 all" terminated with exit code 2. Build might be incomplete.
+
+13:04:04 Build Failed. 3 errors, 1 warnings. (took 592ms)
+

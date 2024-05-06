@@ -1,0 +1,66 @@
+#ifndef __LCD_H__
+#define __LCD_H__
+
+void lcdInit(void);
+void delayMs(int n);
+void writeToBus(int b0, int b1, int b2, int b3, int b4, int b5, int b6, int b7);
+void enableSignal(void);
+
+void sendCommand(int b7, int b6, int b5, int b4, int b3, int b2, int b1, int b0);
+void sendData(int val);
+void sendString(int string[]);
+
+void lcdSetup(void);
+
+#define DB0 0
+#define DB1 1
+#define DB2 2
+#define DB3 3
+#define DB4 4
+#define DB5 5
+#define DB6 6
+#define DB7	7
+
+#define charA ((0<<DB7) | (1<<DB6) | (0<<DB5) |  (0<<DB4) |  (0<<DB3) |  (0<<DB2) |  (0<<DB1) |  (1<<DB0))
+#define charB ((0<<DB7) | (1<<DB6) | (0<<DB5) |  (0<<DB4) |  (0<<DB3) |  (0<<DB2) |  (1<<DB1) |  (0<<DB0))
+#define charC ((0<<DB7) | (1<<DB6) | (0<<DB5) |  (0<<DB4) |  (0<<DB3) |  (0<<DB2) |  (1<<DB1) |  (1<<DB0))
+#define charD ((0<<DB7) | (1<<DB6) | (0<<DB5) |  (0<<DB4) |  (0<<DB3) |  (1<<DB2) |  (0<<DB1) |  (0<<DB0))
+#define charE ((0<<DB7) | (1<<DB6) | (0<<DB5) |  (0<<DB4) |  (0<<DB3) |  (1<<DB2) |  (0<<DB1) |  (1<<DB0))
+#define charF ((0<<DB7) | (1<<DB6) | (0<<DB5) |  (0<<DB4) |  (0<<DB3) |  (1<<DB2) |  (1<<DB1) |  (0<<DB0))
+#define charG ((0<<DB7) | (1<<DB6) | (0<<DB5) |  (0<<DB4) |  (0<<DB3) |  (1<<DB2) |  (1<<DB1) |  (1<<DB0))
+#define charH ((0<<DB7) | (1<<DB6) | (0<<DB5) |  (0<<DB4) |  (1<<DB3) |  (0<<DB2) |  (0<<DB1) |  (0<<DB0))
+#define charI ((0<<DB7) | (1<<DB6) | (0<<DB5) |  (0<<DB4) |  (1<<DB3) |  (0<<DB2) |  (0<<DB1) |  (1<<DB0))
+#define charJ ((0<<DB7) | (1<<DB6) | (0<<DB5) |  (0<<DB4) |  (1<<DB3) |  (0<<DB2) |  (1<<DB1) |  (0<<DB0))
+#define charK ((0<<DB7) | (1<<DB6) | (0<<DB5) |  (0<<DB4) |  (1<<DB3) |  (0<<DB2) |  (1<<DB1) |  (1<<DB0))
+#define charL ((0<<DB7) | (1<<DB6) | (0<<DB5) |  (0<<DB4) |  (1<<DB3) |  (1<<DB2) |  (0<<DB1) |  (0<<DB0))
+#define charM ((0<<DB7) | (1<<DB6) | (0<<DB5) |  (0<<DB4) |  (1<<DB3) |  (1<<DB2) |  (0<<DB1) |  (1<<DB0))
+#define charN ((0<<DB7) | (1<<DB6) | (0<<DB5) |  (0<<DB4) |  (1<<DB3) |  (1<<DB2) |  (1<<DB1) |  (0<<DB0))
+#define charO ((0<<DB7) | (1<<DB6) | (0<<DB5) |  (0<<DB4) |  (1<<DB3) |  (1<<DB2) |  (1<<DB1) |  (1<<DB0))
+#define charP ((0<<DB7) | (1<<DB6) | (0<<DB5) |  (1<<DB4) |  (0<<DB3) |  (0<<DB2) |  (0<<DB1) |  (0<<DB0))
+#define charQ ((0<<DB7) | (1<<DB6) | (0<<DB5) |  (1<<DB4) |  (0<<DB3) |  (0<<DB2) |  (0<<DB1) |  (1<<DB0))
+#define charR ((0<<DB7) | (1<<DB6) | (0<<DB5) |  (1<<DB4) |  (0<<DB3) |  (0<<DB2) |  (1<<DB1) |  (0<<DB0))
+#define charS ((0<<DB7) | (1<<DB6) | (0<<DB5) |  (1<<DB4) |  (0<<DB3) |  (0<<DB2) |  (1<<DB1) |  (1<<DB0))
+#define charT ((0<<DB7) | (1<<DB6) | (0<<DB5) |  (1<<DB4) |  (0<<DB3) |  (1<<DB2) |  (0<<DB1) |  (0<<DB0))
+#define charU ((0<<DB7) | (1<<DB6) | (0<<DB5) |  (1<<DB4) |  (0<<DB3) |  (1<<DB2) |  (0<<DB1) |  (1<<DB0))
+#define charV ((0<<DB7) | (1<<DB6) | (0<<DB5) |  (1<<DB4) |  (0<<DB3) |  (1<<DB2) |  (1<<DB1) |  (0<<DB0))
+#define charW ((0<<DB7) | (1<<DB6) | (0<<DB5) |  (1<<DB4) |  (0<<DB3) |  (1<<DB2) |  (1<<DB1) |  (1<<DB0))
+#define charX ((0<<DB7) | (1<<DB6) | (0<<DB5) |  (1<<DB4) |  (1<<DB3) |  (0<<DB2) |  (0<<DB1) |  (0<<DB0))
+#define charY ((0<<DB7) | (1<<DB6) | (0<<DB5) |  (1<<DB4) |  (1<<DB3) |  (0<<DB2) |  (0<<DB1) |  (1<<DB0))
+#define charZ ((0<<DB7) | (1<<DB6) | (0<<DB5) |  (1<<DB4) |  (1<<DB3) |  (0<<DB2) |  (1<<DB1) |  (0<<DB0))
+
+#define char0 ((0<<DB7) | (0<<DB6) | (1<<DB5) |  (1<<DB4) |  (0<<DB3) |  (0<<DB2) |  (0<<DB1) |  (0<<DB0))
+#define char1 ((0<<DB7) | (0<<DB6) | (1<<DB5) |  (1<<DB4) |  (0<<DB3) |  (0<<DB2) |  (0<<DB1) |  (1<<DB0))
+#define char2 ((0<<DB7) | (0<<DB6) | (1<<DB5) |  (1<<DB4) |  (0<<DB3) |  (0<<DB2) |  (1<<DB1) |  (0<<DB0))
+#define char3 ((0<<DB7) | (0<<DB6) | (1<<DB5) |  (1<<DB4) |  (0<<DB3) |  (0<<DB2) |  (1<<DB1) |  (1<<DB0))
+#define char4 ((0<<DB7) | (0<<DB6) | (1<<DB5) |  (1<<DB4) |  (0<<DB3) |  (1<<DB2) |  (0<<DB1) |  (0<<DB0))
+#define char5 ((0<<DB7) | (0<<DB6) | (1<<DB5) |  (1<<DB4) |  (0<<DB3) |  (1<<DB2) |  (0<<DB1) |  (1<<DB0))
+#define char6 ((0<<DB7) | (0<<DB6) | (1<<DB5) |  (1<<DB4) |  (0<<DB3) |  (1<<DB2) |  (1<<DB1) |  (0<<DB0))
+#define char7 ((0<<DB7) | (0<<DB6) | (1<<DB5) |  (1<<DB4) |  (0<<DB3) |  (1<<DB2) |  (1<<DB1) |  (1<<DB0))
+#define char8 ((0<<DB7) | (0<<DB6) | (1<<DB5) |  (1<<DB4) |  (1<<DB3) |  (0<<DB2) |  (0<<DB1) |  (0<<DB0))
+#define char9 ((0<<DB7) | (0<<DB6) | (1<<DB5) |  (1<<DB4) |  (1<<DB3) |  (0<<DB2) |  (0<<DB1) |  (1<<DB0))
+
+#define charSpace ((1<<DB7) | (1<<DB6) | (1<<DB5) |  (1<<DB4) |  (1<<DB3) |  (1<<DB2) |  (1<<DB1) |  (0<<DB0))
+#define charColon ((0<<DB7) | (0<<DB6) | (1<<DB5) |  (1<<DB4) |  (1<<DB3) |  (0<<DB2) |  (1<<DB1) |  (0<<DB0))
+#define charPound ((0<<DB7) | (0<<DB6) | (1<<DB5) |  (0<<DB4) |  (0<<DB3) |  (0<<DB2) |  (1<<DB1) |  (1<<DB0))
+
+#endif

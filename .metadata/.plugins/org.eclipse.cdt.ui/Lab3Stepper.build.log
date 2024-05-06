@@ -1,0 +1,10 @@
+12:41:47 **** Incremental Build of configuration Debug for project Lab3Stepper ****
+make -j12 all 
+arm-none-eabi-size  Lab3Stepper.elf 
+   text	   data	    bss	    dec	    hex	filename
+   1572	      8	   1568	   3148	    c4c	Lab3Stepper.elf
+Finished building: default.size.stdout
+ 
+
+12:41:47 Build Finished. 0 errors, 0 warnings. (took 227ms)
+

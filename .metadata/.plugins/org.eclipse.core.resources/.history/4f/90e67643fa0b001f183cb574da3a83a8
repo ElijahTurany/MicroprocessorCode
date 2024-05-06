@@ -1,0 +1,12 @@
+#ifndef __SERVO_H__
+#define __SERVO_H__
+
+#include <stdint.h>
+#include <stdbool.h>
+
+void servoOpen();
+void servoClose();
+void servoStop();
+void servoPinInit();
+void TIM5CH1Init();
+#endif

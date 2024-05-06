@@ -1,0 +1,4 @@
+../Src/gpio.c:11:6:GPIO_Init	4	static
+../Src/gpio.c:33:6:Half_Stepping_Clockwise	32	static
+../Src/gpio.c:55:6:Half_Stepping_CounterClockwise	32	static
+../Src/gpio.c:77:6:Full_Stepping_CounterClockwise	32	static

@@ -1,0 +1,13 @@
+#ifndef __LCD_H__
+#define __LCD_H__
+
+
+void lcdInit(void);
+void lcdDelay(void);
+void enableSignal(void);
+void clearDisplay(void);
+void returnHome(void);
+void entryModeSet(void);
+void displayOn(void);
+void displayOff(void);
+#endif

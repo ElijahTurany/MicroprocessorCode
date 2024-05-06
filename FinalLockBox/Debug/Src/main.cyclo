@@ -1,0 +1,6 @@
+../Src/main.c:33:5:main	1
+../Src/main.c:67:6:pseudoDelay	2
+../Src/main.c:86:5:dialLock	23
+../Src/main.c:169:5:keypadLock	7
+../Src/main.c:222:5:lockBox	8
+../Src/main.c:265:5:arraysEqual	3

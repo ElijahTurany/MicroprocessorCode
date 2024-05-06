@@ -1,0 +1,10 @@
+#ifndef __LCD_H__
+#define __LCD_H__
+
+
+void lcdInit(void);
+void clearDisplay(void);
+void returnHome(void);
+void entryModeSet(void);
+void displayOn(void);
+#endif

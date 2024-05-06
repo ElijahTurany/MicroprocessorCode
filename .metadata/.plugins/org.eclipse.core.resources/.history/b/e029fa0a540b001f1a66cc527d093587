@@ -1,0 +1,299 @@
+/*Access peripheral of the L476RG u controller*/
+#include "stm32l476xx.h"
+#include "fpu.h"
+#include "uart.h"
+#include "adc.h"
+#include "bsp.h"
+#include "keypad.h"
+#include "servo.h"
+#include "lcd.h"
+#include <stdio.h>
+#include <string.h>
+
+//#define GPIOAEN		(1U<<0)
+//#define PIN5		(1U<<5)
+//#define LED_PIN		PIN5
+#define BTN_PIN (1U<<13)
+#define GREEN_LED 5
+#define RED_LED 3
+
+int v1low = 0;
+int v1high = 300;
+
+
+void pseudoDelay(void);
+int dialLock(int sensorVal);
+int keypadLock(void);
+int arraysEqual(int arr1[], int arr2[], int size);
+int lockBox(int keypad, int dial);
+void ledFlash(int ledPin);
+void ledToggle(int ledPin);
+
+int dialValue;
+int btn_state;
+int dialState = 0;
+int lockState = 0;
+//int* keypadState = 0;
+bool open = false;
+
+int main()
+{
+
+	/*Enable FPU*/
+	led_init();
+	//button_init();
+	debug_uart_init();
+	pa4_adc1_init();
+	pseudoDelay();
+	start_conversion();
+	keypadInit();
+	servoPinInit();
+	TIM5CH1Init();
+//	servoClose();
+
+	lcdInit();
+	lcdSetup();
+	//delayMs(500);
+
+//	int hw[11] = {charH, charE, charL, charL, charO, charSpace, charW, charO, charR, charL, charD};
+//
+//	sendString(hw, 11);
+//
+//	sendData(charSpace);
+//
+//	int num[4] = { char1, char2, char3, char4};
+
+
+
+	int enterCode[11] = {charE, charN, charT, charE, charR, charSpace, charC, charO, charD, charE, charColon};
+	sendString(enterCode, 11);
+
+	delayMs(1000);
+
+	int tryAgain[9] = {charT, charR, charY, charSpace, charA, charG, charA, charI, charN};
+
+	delayMs(1000);
+
+	clearScreen();
+
+	while(1){
+//		writeData();
+//		writeToBus(1,1,1,1,1,1,1,1);
+		pseudoDelay();
+//		pseudoDelay();
+//		pseudoDelay();
+//		pseudoDelay();
+//		servoClose();
+//		pseudoDelay();
+//		pseudoDelay();
+//		pseudoDelay();
+//		pseudoDelay();
+//		printf("Sensor value: %d\n\r", sensorValue);
+//		if(!(GPIOC->IDR & BTN_PIN)) {
+//
+//			dialState = dialLock(sensorValue, dialState);
+//			//btn_state = 0; //because of active low
+//			//led_off();
+//		}
+		dialValue = adc_read();
+		int keypadValue = keypadLock();
+		int dialLockValue = dialLock(dialValue);
+		printf("Keypad: %d\n\r", keypadValue);
+		printf("Sensor value: %d\n\r", dialValue);
+		printf("Dial state: %d\n\r", dialState);
+		printf("Dial lock state: %d\n\r", dialLockValue);
+		printf("Lock state: %d\n\r", lockBox(keypadValue, dialLockValue));
+//		//led_on();
+		//led_off();
+	}
+}
+
+void pseudoDelay(void){
+	int x;
+	for(int i = 0; i < 64000; i++) {
+		x++;
+	}
+}
+
+int lowVal1 = 0;
+int highVal1 = 0;
+int lowVal2 = 3200;
+int highVal2 = 3600;
+int lowVal3 = 1800;
+int highVal3 = 2200;
+int lastVal = 0;
+int direction = 0;
+
+int dialLock(int sensorVal) {
+	if(sensorVal - lastVal > 10) {
+		direction = 1;
+	}
+	else if(sensorVal - lastVal < -10) {
+		direction = -1;
+	}
+	else {
+		direction = 0;
+	}
+	lastVal = sensorVal;
+
+	switch (dialState) {
+		case 0:
+			if(sensorVal >= lowVal1 && sensorVal <= highVal1) {
+				dialState = 1;
+				return false;
+			}
+			else {
+				return false;
+			}
+		case 1:
+			if(sensorVal >= lowVal1 && sensorVal <= highVal1) {
+				return false;
+			}
+			else if(sensorVal >= highVal2 || sensorVal <= lowVal1 || direction == -1) {
+				dialState = 0;
+				return false;
+			}
+			else if(sensorVal >= lowVal2) {
+				dialState = 2;
+				return false;
+			}
+			else {
+				return false;
+			}
+		case 2:
+			if(sensorVal >= lowVal2 && sensorVal <= highVal2) {
+				return false;
+			}
+			else if(sensorVal <= lowVal3 || sensorVal >= highVal2 || direction == 1) {
+				dialState = 0;
+				return false;
+			}
+			else if(sensorVal <= highVal3) {
+				dialState = 3;
+				return false;
+			}
+			else {
+				return false;
+			}
+		case 3:
+			if(sensorVal >= lowVal3 && sensorVal <= highVal3) {
+				return true;
+			}
+			else {
+				dialState = 0;
+				return false;
+			}
+		default:
+			return false;
+	}
+}
+
+int keypadCode[4] = {49,50,51,52};
+int keypadInput[4] = {0,0,0,0};
+int keysInput = 0;
+int lastInput = 0;
+bool keypadFlash = false;
+
+int keypadLock() {
+	int scanVal = keypadScan();
+	if(keypadScan() == 35) {
+		keysInput = 0;
+		lastInput = 0;
+		memset(keypadInput, 0, sizeof(keypadInput));
+		keypadFlash = false;
+		return 35;
+	}
+	if(keysInput >= 4) {
+		//return true;
+		if (!(arraysEqual(keypadCode, keypadInput, 4))) {
+			keysInput = 0;
+			lastInput = 0;
+			memset(keypadInput, 0, sizeof(keypadInput));
+			keypadFlash = false;
+			lineTwo();
+			sendString(tryAgain, 9);
+			return -1;
+		}
+		else {
+			return 1;
+		}
+	}
+	else {
+		if((scanVal != 0) && (scanVal != lastInput)) {
+			lastInput = scanVal;
+			keypadInput[keysInput] = scanVal;
+			displayInput(scanVal);
+			keysInput++;
+			return scanVal;
+		}
+		else if(scanVal == 0) {
+			lastInput = 0;
+			return scanVal;
+		}
+	}
+	return scanVal;
+}
+
+void ledToggle(int ledPin) {
+	//GPIOB->ODR ^= (1<<ledPin);
+}
+
+void ledFlash(int ledPin) {
+//	GPIOB->ODR |= (1<<ledPin);
+//	delayMs(500);
+//	GPIOB->ODR &=~ (1<<ledPin);
+}
+
+int lockBox2(int keypad, int dial) {
+	switch (lockState) {
+		case 0:
+	}
+}
+
+int lockBox(int keypad, int dial) {
+	if(lockState == 0) {
+		if (keypad == 1 && dial == 1) {
+			servoOpen();
+			ledToggle(GREEN_LED);
+			lockState = 1;
+			return 1;
+		}
+		else if (keypad == 1) {
+			if (!keypadFlash) {
+				ledFlash(GREEN_LED);
+				keypadFlash = true;
+			}
+		}
+		else if ((keypad == -1) || (keypad == 35)) {
+			ledFlash(RED_LED);
+			return 0;
+		}
+		return 0;
+	}
+	else if (keypad == 35) {
+		servoClose();
+		ledToggle(GREEN_LED);
+		ledFlash(RED_LED);
+		lockState = 0;
+		dialState = 0;
+		return 0;
+	}
+	else {
+		return 1;
+	}
+}
+
+int arraysEqual(int arr1[], int arr2[], int size) {
+    for (int i = 0; i < size; i++) {
+        if (arr1[i] != arr2[i]) {
+            return 0; // Arrays are not equal
+        }
+    }
+    return 1; // Arrays are equal
+}
+
+
+
+
+
+

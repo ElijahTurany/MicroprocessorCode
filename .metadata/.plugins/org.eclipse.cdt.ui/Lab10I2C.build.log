@@ -1,0 +1,17 @@
+13:31:10 **** Incremental Build of configuration Debug for project Lab10I2C ****
+make -j12 all 
+arm-none-eabi-gcc "../Src/I2C.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DSTM32L4 -DSTM32 -DSTM32L476RGTx -DNUCLEO_L476RG -DSTM32L476xx -c -I../Inc -I"C:/Users/TuranyElijah/OneDrive - University of Wisconsin-Stout/Documents/School/2024Spring/Microproccessor/Headers/CMSIS/Device/ST/STM32L4xx/Include" -I"C:/Users/TuranyElijah/OneDrive - University of Wisconsin-Stout/Documents/School/2024Spring/Microproccessor/Headers/CMSIS/Include" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/I2C.d" -MT"Src/I2C.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Src/I2C.o"
+arm-none-eabi-gcc -o "Lab10I2C.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\TuranyElijah\STM32CubeIDE\workspace_1.14.1\Lab10I2C\STM32L476RGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Lab10I2C.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Lab10I2C.elf
+ 
+arm-none-eabi-size  Lab10I2C.elf 
+arm-none-eabi-objdump -h -S Lab10I2C.elf  > "Lab10I2C.list"
+   text	   data	    bss	    dec	    hex	filename
+   2132	      8	   1576	   3716	    e84	Lab10I2C.elf
+Finished building: default.size.stdout
+ 
+Finished building: Lab10I2C.list
+ 
+
+13:31:11 Build Finished. 0 errors, 0 warnings. (took 922ms)
+

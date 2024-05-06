@@ -1,0 +1,10 @@
+13:19:30 **** Incremental Build of configuration Debug for project UARTRXAssignment ****
+make -j12 all 
+arm-none-eabi-size  UARTRXAssignment.elf 
+   text	   data	    bss	    dec	    hex	filename
+   5536	    100	   1908	   7544	   1d78	UARTRXAssignment.elf
+Finished building: default.size.stdout
+ 
+
+13:19:30 Build Finished. 0 errors, 0 warnings. (took 295ms)
+

@@ -1,0 +1,6 @@
+../Src/main.c:33:5:main	16	static
+../Src/main.c:67:6:pseudoDelay	16	static
+../Src/main.c:86:5:dialLock	16	static
+../Src/main.c:169:5:keypadLock	16	static
+../Src/main.c:222:5:lockBox	16	static
+../Src/main.c:265:5:arraysEqual	32	static

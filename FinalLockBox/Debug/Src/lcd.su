@@ -1,0 +1,12 @@
+../Src/lcd.c:9:6:lcdInit	4	static
+../Src/lcd.c:36:6:delayMs	24	static
+../Src/lcd.c:44:6:writeToBus	24	static
+../Src/lcd.c:50:6:enableSignal	8	static
+../Src/lcd.c:57:6:sendCommand	40	static
+../Src/lcd.c:66:6:sendData	16	static
+../Src/lcd.c:76:6:sendString	24	static
+../Src/lcd.c:82:6:lcdSetup	24	static
+../Src/lcd.c:96:6:clearScreen	24	static
+../Src/lcd.c:103:6:lineOne	24	static
+../Src/lcd.c:108:6:lineTwo	24	static
+../Src/lcd.c:115:6:displayInput	16	static

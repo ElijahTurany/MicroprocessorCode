@@ -1,0 +1,80 @@
+#include "servo.h"
+#include "stm32l476xx.h"
+
+#define GPIOAEN		(1U<<0)
+
+#define SERVO_PIN  0
+#define SERVO_PORT GPIOA
+
+//Servo pin initialization
+void servoPinInit() {
+	// Enable GPIOA clock
+	RCC->AHB2ENR  |= RCC_AHB2ENR_GPIOAEN;
+
+	// Step 1: Clear bits
+	GPIOA->MODER  	&= ~(0x03 << (2*SERVO_PIN));
+
+	// Step 2: set AF mode: use Input(00), Output(01), Alternate Function(10), Analog(11)
+	GPIOA->MODER  	|=   0x02 << (2*SERVO_PIN);
+
+	// 	Clear AF register
+	GPIOA->AFR[0] 	&= ~(0xF << (4*SERVO_PIN));
+	// step 3, set	AF to AF 2 for TIM5_CH1
+	GPIOA->AFR[0] 	|=   0x2 << (4*SERVO_PIN);
+
+	//Set I/O output speed value as high speed
+	// Speed clear bits
+	GPIOA->OSPEEDR  &= ~(0x03<<(2*SERVO_PIN));
+	// Set Speed
+	GPIOA->OSPEEDR  |=   0x03<<(2*SERVO_PIN);
+
+	//Set I/O as no pull-up pull-down
+	// No PUPD(00, reset), Pull-up(01), Pull-down(10), Reserved (11)
+	GPIOA->PUPDR    |= (0x03<<(2*SERVO_PIN));
+}
+
+//Timer 5 Channel 1 Initialization
+void TIM5CH1Init() {
+	// Enable the timer clock
+	// Enable TIMER clock
+    RCC->APB1ENR1 |= RCC_APB1ENR1_TIM5EN;
+
+	// Counting direction: 0 = up-counting, 1 = down-counting
+	TIM5->CR1 &= ~TIM_CR1_DIR;
+
+    TIM5->PSC = 39;
+    // Auto-reload: Upcouting (0..ARR), Downcouting (ARR..0)
+    TIM5->ARR = 2000;
+    // Clear ouput compare mode bits for channel 1
+	TIM5->CCMR1 &= ~TIM_CCMR1_OC1M;
+	// OC1M = 110 for PWM Mode 1 output on ch1
+    TIM5->CCMR1 |= TIM_CCMR1_OC1M_1 | TIM_CCMR1_OC1M_2;
+    // Output 1 preload enable
+    TIM5->CCMR1 |= TIM_CCMR1_OC1PE;
+
+	// Select output polarity: 0 = active high, 1 = active low
+	TIM5->CCMR1 |= TIM_CCER_CC1NP; // select active high
+
+    // Enable output for ch1
+	TIM5->CCER |= TIM_CCER_CC1E;
+
+    // Main output enable (MOE): 0 = Disable, 1 = Enable
+	TIM5->BDTR |= TIM_BDTR_MOE;
+
+	// Output Compare Register for channel 1
+	TIM5->CCR1  = 1000;
+	// Enable counter
+	TIM5->CR1  |= TIM_CR1_CEN;
+}
+
+void servoOpen() { // 1.7ms
+	TIM5->CCR1  = 200;
+	for(int i = 0; i < 64000; i++) {}
+
+}
+
+void servoClose() { // 1.3ms
+	TIM5->CCR1  = 100;
+	for(int i = 0; i < 64000; i++) {}
+
+}

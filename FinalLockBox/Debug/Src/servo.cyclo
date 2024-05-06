@@ -1,0 +1,4 @@
+../Src/servo.c:8:6:servoPinInit	1
+../Src/servo.c:35:6:TIM5CH1Init	1
+../Src/servo.c:69:6:servoOpen	2
+../Src/servo.c:76:6:servoClose	2

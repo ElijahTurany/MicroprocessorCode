@@ -1,0 +1,218 @@
+/*Access peripheral of the L476RG u controller*/
+#include "stm32l476xx.h"
+#include "fpu.h"
+#include "uart.h"
+#include "adc.h"
+#include "bsp.h"
+#include "keypad.h"
+#include "servo.h"
+#include "lcd.h"
+#include <stdio.h>
+#include <string.h>
+
+//#define GPIOAEN		(1U<<0)
+//#define PIN5		(1U<<5)
+//#define LED_PIN		PIN5
+#define BTN_PIN (1U<<13)
+
+int v1low = 0;
+int v1high = 300;
+
+
+void pseudoDelay(void);
+int dialLock(int sensorVal);
+int keypadLock(void);
+int arraysEqual(int arr1[], int arr2[], int size);
+
+int sensorValue;
+int btn_state;
+int dialState = 0;
+//int* keypadState = 0;
+bool open = false;
+
+int main()
+{
+
+	/*Enable FPU*/
+	led_init();
+	//button_init();
+	debug_uart_init();
+	pa4_adc1_init();
+	pseudoDelay();
+	start_conversion();
+	keypadInit();
+	servoPinInit();
+	TIM5CH1Init();
+
+//	lcdInit();
+//
+//	clearDisplay();
+//	returnHome();
+//	entryModeSet();
+//	displayOn();
+//	writeData();
+
+	//Keypad_Pin_Init();
+
+	while(1){
+
+//		pseudoDelay();
+//		pseudoDelay();
+//		pseudoDelay();
+//		pseudoDelay();
+//		servoClose();
+//		pseudoDelay();
+//		pseudoDelay();
+//		pseudoDelay();
+//		pseudoDelay();
+//		printf("Sensor value: %d\n\r", sensorValue);
+//		if(!(GPIOC->IDR & BTN_PIN)) {
+//
+//			dialState = dialLock(sensorValue, dialState);
+//			//btn_state = 0; //because of active low
+//			//led_off();
+//		}
+//		sensorValue = adc_read();
+//		//printf("Sensor value: %d\n\r", keypadLock());
+//		printf("Sensor value: %d\n\r", sensorValue);
+//		printf("Dial state: %d\n\r", dialState);
+//		printf("Lock state: %d\n\r", dialLock(sensorValue));
+//		//led_on();
+		//led_off();
+	}
+}
+
+void pseudoDelay(void){
+	int x;
+	for(int i = 0; i < 64000; i++) {
+		x++;
+	}
+}
+
+int lowVal1 = 0;
+int highVal1 = 0;
+int lowVal2 = 3200;
+int highVal2 = 3600;
+int lowVal3 = 1800;
+int highVal3 = 2200;
+int lastVal = 0;
+int direction = 0;
+
+int dialLock(int sensorVal) {
+	if(sensorVal - lastVal > 10) {
+		direction = 1;
+	}
+	else if(sensorVal - lastVal < -10) {
+		direction = -1;
+	}
+	else {
+		direction = 0;
+	}
+	lastVal = sensorVal;
+
+	switch (dialState) {
+		case 0:
+			if(sensorVal >= lowVal1 && sensorVal <= highVal1) {
+				dialState = 1;
+				return false;
+			}
+			else {
+				return false;
+			}
+		case 1:
+			if(sensorVal >= lowVal1 && sensorVal <= highVal1) {
+				return false;
+			}
+			else if(sensorVal >= highVal2 || sensorVal <= lowVal1 || direction == -1) {
+				dialState = 0;
+				return false;
+			}
+			else if(sensorVal >= lowVal2) {
+				dialState = 2;
+				return false;
+			}
+			else {
+				return false;
+			}
+		case 2:
+			if(sensorVal >= lowVal2 && sensorVal <= highVal2) {
+				return false;
+			}
+			else if(sensorVal <= lowVal3 || sensorVal >= highVal2 || direction == 1) {
+				dialState = 0;
+				return false;
+			}
+			else if(sensorVal <= highVal3) {
+				dialState = 3;
+				return false;
+			}
+			else {
+				return false;
+			}
+		case 3:
+			if(sensorVal >= lowVal3 && sensorVal <= highVal3) {
+				return true;
+			}
+			else {
+				dialState = 0;
+				return false;
+			}
+		default:
+			return false;
+	}
+}
+
+int keypadCode[4] = {49,50,51,52};
+int keypadInput[4] = {0,0,0,0};
+int keysInput = 0;
+int lastInput = 0;
+
+int keypadLock() {
+	int scanVal = keypadScan();
+	if(keysInput >= 4) {
+		//return true;
+		if((keypadScan() == 42) || !(arraysEqual(keypadCode, keypadInput, 4))) {
+			keysInput = 0;
+			lastInput = 0;
+			memset(keypadInput, 0, sizeof(keypadInput));
+			return -1;
+		}
+		else {
+			return 100;
+		}
+	}
+	else {
+		if(scanVal == 35) {
+			keysInput = 0;
+			lastInput = 0;
+			memset(keypadInput, 0, sizeof(keypadInput));
+			return scanVal;
+		}
+		else if((scanVal != 0) && (scanVal != lastInput)) {
+			lastInput = scanVal;
+			keypadInput[keysInput] = scanVal;
+			keysInput++;
+			return scanVal;
+		}
+		else if(scanVal == 0) {
+			lastInput = 0;
+			return scanVal;
+		}
+	}
+	return scanVal;
+}
+
+int arraysEqual(int arr1[], int arr2[], int size) {
+    for (int i = 0; i < size; i++) {
+        if (arr1[i] != arr2[i]) {
+            return 0; // Arrays are not equal
+        }
+    }
+    return 1; // Arrays are equal
+}
+
+
+
+
+
+

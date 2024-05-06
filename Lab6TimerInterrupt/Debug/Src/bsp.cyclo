@@ -1,0 +1,5 @@
+C:/Users/TuranyElijah/OneDrive - University of Wisconsin-Stout/Documents/School/2024Spring/MicroproccessorSystemDesign/Lab1Blinky/Headers/CMSIS/Include/core_cm4.h:1679:22:__NVIC_EnableIRQ	2
+../Src/bsp.c:11:6:led_init	1
+../Src/bsp.c:24:6:tim2_init	1
+../Src/bsp.c:47:6:TIM2_IRQHandler	2
+../Src/bsp.c:56:6:TIM2_callback	1
